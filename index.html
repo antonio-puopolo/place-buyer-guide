@@ -589,6 +589,7 @@ const AGENTS = [
 ];
 const OFFICE = { name:'Place Camp Hill', address:'4/152 Boundary Road, Camp Hill QLD 4152', phone:'(07) 3107 2111', web:'eplace.com.au' };
 
+// ── Helpers ───────────────────────────────────────────────────
 function setText(id, val, html=false){
   const el = document.getElementById(id);
   if(!el) return;
@@ -596,28 +597,25 @@ function setText(id, val, html=false){
 }
 
 function agentBlock(a){
-  return `
-    <div>
-      <div style="font-weight:700;font-size:16px;color:var(--cream);margin-bottom:2px">${a.name}</div>
-      <div style="font-size:12px;color:var(--muted-n);margin-bottom:10px">Lead Agent · ${OFFICE.name}</div>
-      <div class="detail"><span class="lbl">Mobile</span><a href="tel:${a.mobile.replace(/\s/g,'')}">${a.mobile}</a></div>
-      <div class="detail"><span class="lbl">Email</span><a href="mailto:${a.email}">${a.email}</a></div>
-    </div>`;
+  return `<div>
+    <div style="font-weight:700;font-size:16px;color:var(--cream);margin-bottom:2px">${a.name}</div>
+    <div style="font-size:12px;color:var(--muted-n);margin-bottom:10px">Lead Agent · ${OFFICE.name}</div>
+    <div class="detail"><span class="lbl">Mobile</span><a href="tel:${a.mobile.replace(/\s/g,'')}">${a.mobile}</a></div>
+    <div class="detail"><span class="lbl">Email</span><a href="mailto:${a.email}">${a.email}</a></div>
+  </div>`;
 }
 
 function buildContactCard(a1, a2){
   const card = document.getElementById('dyn-contact-card');
   if(!card) return;
   if(a2){
-    card.innerHTML = `
-      <div class="card-lbl">Your Agents</div>
+    card.innerHTML = `<div class="card-lbl">Your Agents</div>
       <div style="display:flex;flex-direction:column;gap:24px;margin-top:4px">
         ${agentBlock(a1)}
         <div style="border-top:1px solid rgba(244,238,227,.15);padding-top:20px">${agentBlock(a2)}</div>
       </div>`;
   } else {
-    card.innerHTML = `
-      <div class="card-lbl">Your Agent</div>
+    card.innerHTML = `<div class="card-lbl">Your Agent</div>
       <div class="card-name">${a1.name}</div>
       <div class="card-role">Lead Agent · ${OFFICE.name}</div>
       <div class="detail"><span class="lbl">Mobile</span><a href="tel:${a1.mobile.replace(/\s/g,'')}">${a1.mobile}</a></div>
@@ -625,77 +623,26 @@ function buildContactCard(a1, a2){
   }
 }
 
+function applyAgents(agentIndexes){
+  if(!agentIndexes.length) return;
+  const a1 = AGENTS[agentIndexes[0]];
+  const a2 = agentIndexes.length > 1 ? AGENTS[agentIndexes[1]] : null;
+  const coverName  = a2 ? `${a1.name.split(' ')[0]} & ${a2.name.split(' ')[0]}` : a1.name;
+  const coverLine  = a2 ? `${OFFICE.name} · ${a1.mobile} · ${a2.mobile}` : `${OFFICE.name} · ${a1.email} · ${a1.mobile}`;
+  const avatarText = a2 ? a1.name[0]+a2.name[0] : a1.name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
+  setText('dyn-agent-name-cover', coverName);
+  setText('dyn-agent-cover-line', coverLine);
+  setText('dyn-avatar', avatarText);
+  setText('dyn-agent-name-sign', coverName);
+  setText('dyn-agent-role-sign', a2 ? OFFICE.name : `Lead Agent · ${OFFICE.name}`);
+  buildContactCard(a1, a2);
+}
+
+// ── On load ───────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', function(){
 
-  // ── Read URL params on load (client view) ───────────────────
   const p = new URLSearchParams(window.location.search);
-  if(p.get('share')){
-    document.getElementById('editPanel')?.remove();
-    document.querySelector('.edit-toggle')?.remove();
-    document.getElementById('shareBtn')?.remove();
-
-    const address = p.get('address') || '';
-    const suburb  = p.get('suburb')  || '';
-    const agents  = (p.get('agents') || '').split(',').filter(Boolean).map(Number);
-
-    if(address) setText('dyn-address', address.replace(/\|/g,'<br>'), true);
-    if(suburb)  setText('dyn-suburb', suburb);
-
-    if(agents.length){
-      const a1 = AGENTS[agents[0]];
-      const a2 = agents[1] !== undefined ? AGENTS[agents[1]] : null;
-      const coverName  = a2 ? `${a1.name.split(' ')[0]} & ${a2.name.split(' ')[0]}` : a1.name;
-      const coverLine  = a2 ? `${OFFICE.name} · ${a1.mobile} · ${a2.mobile}` : `${OFFICE.name} · ${a1.email} · ${a1.mobile}`;
-      const avatarText = a2 ? a1.name[0]+a2.name[0] : a1.name.split(' ').map(w=>w[0]).join('').slice(0,2);
-      setText('dyn-agent-name-cover', coverName);
-      setText('dyn-agent-cover-line', coverLine);
-      setText('dyn-avatar', avatarText);
-      setText('dyn-agent-name-sign', coverName);
-      setText('dyn-agent-role-sign', a2 ? OFFICE.name : `Lead Agent · ${OFFICE.name}`);
-      buildContactCard(a1, a2);
-    }
-    return;
-  }
-
-  // ── Share / copy client link ─────────────────────────────────
-  function shareClient(){
-    const selected = [...document.querySelectorAll('#agent-picker input:checked')].map(cb => +cb.dataset.idx);
-    const address  = document.getElementById('ep-address').value.trim().replace(/\s+/g,'|');
-    const suburb   = document.getElementById('ep-suburb').value.trim();
-    const base = window.location.origin + window.location.pathname;
-    const params = new URLSearchParams({ share:'1', address, suburb, agents: selected.join(',') });
-    const url = `${base}?${params}`;
-    navigator.clipboard.writeText(url).then(()=>{
-      const btn = document.getElementById('shareBtn');
-      btn.textContent = '✓ Link Copied!';
-      btn.classList.add('copied');
-      setTimeout(()=>{ btn.textContent = '🔗 Copy Client Link'; btn.classList.remove('copied'); }, 2500);
-    });
-  }
-  window.shareClient = shareClient;
-
-  // ── Build agent picker checkboxes ───────────────────────────
-  const picker = document.getElementById('agent-picker');
-  AGENTS.forEach((a,i) => {
-    const initials = a.name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
-    const wrap = document.createElement('label');
-    wrap.style.cssText = 'display:flex;align-items:center;gap:12px;padding:12px 14px;border:1px solid #cfcabb;border-radius:10px;cursor:pointer;transition:border-color .2s,background .2s;font-size:14px;';
-    wrap.innerHTML = `
-      <input type="checkbox" data-idx="${i}" onchange="limitAgents(this)" style="width:16px;height:16px;accent-color:#090b38;flex-shrink:0">
-      <div style="width:36px;height:36px;border-radius:50%;background:#090b38;color:#F4EEE3;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex-shrink:0">${initials}</div>
-      <div><div style="font-weight:600;color:#1C1B17">${a.name}</div><div style="font-size:12px;color:#6f6a5d">${a.mobile}</div></div>`;
-    wrap.querySelector('input').addEventListener('change', () => {
-      wrap.style.borderColor = wrap.querySelector('input').checked ? '#090b38' : '#cfcabb';
-      wrap.style.background  = wrap.querySelector('input').checked ? '#F4EEE3' : '';
-    });
-    picker.appendChild(wrap);
-  });
-
-  function limitAgents(cb){
-    const checked = [...document.querySelectorAll('#agent-picker input:checked')];
-    if(checked.length > 2){ cb.checked = false; cb.closest('label').style.borderColor='#cfcabb'; cb.closest('label').style.background=''; }
-  }
-  window.limitAgents = limitAgents;
+  const isShare = !!p.get('share');
 
   // ── Progress bar ─────────────────────────────────────────────
   const prog = document.getElementById('progress');
@@ -705,43 +652,97 @@ document.addEventListener('DOMContentLoaded', function(){
   });
 
   // ── Reveal on scroll ─────────────────────────────────────────
-  const revEls = document.querySelectorAll('[data-reveal]');
-  const io = new IntersectionObserver(entries=>{
-    entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}});
-  },{threshold:.12});
-  revEls.forEach(el=>io.observe(el));
+  document.querySelectorAll('[data-reveal]').forEach(el=>{
+    new IntersectionObserver(([e],o)=>{
+      if(e.isIntersecting){el.classList.add('in');o.unobserve(el);}
+    },{threshold:.12}).observe(el);
+  });
 
-  // ── Apply edits ──────────────────────────────────────────────
-  function applyEdits(){
-    const selected = [...document.querySelectorAll('#agent-picker input:checked')].map(cb => AGENTS[+cb.dataset.idx]);
+  // ── CLIENT / SHARE MODE ───────────────────────────────────────
+  if(isShare){
+    // Hide all editing UI
+    document.getElementById('editPanel')?.remove();
+    document.querySelector('.edit-toggle')?.remove();
+    document.getElementById('shareBtn')?.remove();
+
+    // Address — just use it directly, no pipe tricks
+    const address = p.get('address') || '';
+    const suburb  = p.get('suburb')  || '';
+    const agentIdxs = (p.get('agents') || '').split(',').filter(Boolean).map(Number);
+
+    if(address){
+      // Split number from street name for two-line display
+      const parts = address.match(/^(\d+\S*)\s+(.+)$/);
+      setText('dyn-address', parts ? `${parts[1]}<br>${parts[2]}` : address, true);
+    }
+    if(suburb) setText('dyn-suburb', suburb);
+    applyAgents(agentIdxs);
+    return;
+  }
+
+  // ── EDITOR MODE ───────────────────────────────────────────────
+
+  // Build agent picker
+  const picker = document.getElementById('agent-picker');
+  if(picker){
+    AGENTS.forEach((a,i) => {
+      const initials = a.name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
+      const wrap = document.createElement('label');
+      wrap.style.cssText = 'display:flex;align-items:center;gap:12px;padding:12px 14px;border:1px solid #cfcabb;border-radius:10px;cursor:pointer;transition:border-color .2s,background .2s;font-size:14px;user-select:none;';
+      wrap.innerHTML = `
+        <input type="checkbox" data-idx="${i}" style="width:16px;height:16px;accent-color:#090b38;flex-shrink:0">
+        <div style="width:36px;height:36px;border-radius:50%;background:#090b38;color:#F4EEE3;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex-shrink:0">${initials}</div>
+        <div><div style="font-weight:600;color:#1C1B17">${a.name}</div><div style="font-size:12px;color:#6f6a5d">${a.mobile}</div></div>`;
+      const cb = wrap.querySelector('input');
+      cb.addEventListener('change', ()=>{
+        const all = [...document.querySelectorAll('#agent-picker input:checked')];
+        if(all.length > 2){ cb.checked = false; return; }
+        wrap.style.borderColor = cb.checked ? '#090b38' : '#cfcabb';
+        wrap.style.background  = cb.checked ? '#F4EEE3' : '';
+      });
+      picker.appendChild(wrap);
+    });
+  }
+
+  // Apply button
+  window.applyEdits = function(){
+    const checked = [...document.querySelectorAll('#agent-picker input:checked')];
     const errEl = document.getElementById('ep-agent-error');
-    if(selected.length === 0){ errEl.style.display='block'; return; }
+    if(checked.length === 0){ errEl.style.display='block'; return; }
     errEl.style.display = 'none';
 
     const address = document.getElementById('ep-address').value.trim();
     const suburb  = document.getElementById('ep-suburb').value.trim();
+    const agentIdxs = checked.map(cb => +cb.dataset.idx);
 
-    const a1 = selected[0];
-    const a2 = selected[1] || null;
-
-    const coverName  = a2 ? `${a1.name.split(' ')[0]} & ${a2.name.split(' ')[0]}` : a1.name;
-    const coverLine  = a2 ? `${OFFICE.name} · ${a1.mobile} · ${a2.mobile}` : `${OFFICE.name} · ${a1.email} · ${a1.mobile}`;
-    const avatarText = a2 ? a1.name[0]+a2.name[0] : a1.name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
-
-    const addrBreak = address.replace(/^(\d+\s+\S+)\s+/, '$1<br>');
-    setText('dyn-address', addrBreak, true);
+    const parts = address.match(/^(\d+\S*)\s+(.+)$/);
+    setText('dyn-address', parts ? `${parts[1]}<br>${parts[2]}` : address, true);
     setText('dyn-suburb', suburb);
-    setText('dyn-agent-name-cover', coverName);
-    setText('dyn-agent-cover-line', coverLine);
-    setText('dyn-avatar', avatarText);
-    setText('dyn-agent-name-sign', coverName);
-    setText('dyn-agent-role-sign', a2 ? OFFICE.name : `Lead Agent · ${OFFICE.name}`);
-    buildContactCard(a1, a2);
+    applyAgents(agentIdxs);
 
     document.getElementById('editPanel').classList.remove('open');
     window.scrollTo({top:0, behavior:'smooth'});
-  }
-  window.applyEdits = applyEdits;
+  };
+
+  // Share button — just pass address cleanly, no encoding tricks
+  window.shareClient = function(){
+    const checked = [...document.querySelectorAll('#agent-picker input:checked')];
+    const address = document.getElementById('ep-address').value.trim();
+    const suburb  = document.getElementById('ep-suburb').value.trim();
+    const agents  = checked.map(cb => cb.dataset.idx).join(',');
+
+    const base = window.location.origin + window.location.pathname;
+    const params = new URLSearchParams({ share:'1', address, suburb, agents });
+    const url = `${base}?${params}`;
+
+    navigator.clipboard.writeText(url).then(()=>{
+      const btn = document.getElementById('shareBtn');
+      const orig = btn.textContent;
+      btn.textContent = '✓ Link Copied!';
+      btn.classList.add('copied');
+      setTimeout(()=>{ btn.textContent = orig; btn.classList.remove('copied'); }, 2500);
+    });
+  };
 
 }); // end DOMContentLoaded
 </script>
