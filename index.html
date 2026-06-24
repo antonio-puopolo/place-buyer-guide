@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Place Estate Agents – Buyer Welcome Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+
+<style>
+/* === PLACE BRAND TOKENS === */
+:root{
+  --navy:#090b38;
+  --ink:#1C1B17;
+  --cream:#F4EEE3;
+  --paper:#FBF8F2;
+  --line:#cfcabb;
+  --line-n:rgba(244,238,227,.18);
+  --muted:#6f6a5d;
+  --muted-n:rgba(244,238,227,.62);
+  --clay:#e4e1d6;
+  --clay-mid:#cfcabb;
+  --denim:#d3dce2;
+  --blush:#e1d6d8;
+  --grey:#2f3c49;
+  --maxw:1200px;
+  --pad:clamp(28px,5vw,92px);
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Montserrat',sans-serif;background:var(--paper);color:var(--ink);-webkit-font-smoothing:antialiased}
+a{color:inherit}
+
+#progress{position:fixed;top:0;left:0;height:2px;width:0;background:var(--navy);z-index:9999;transition:width .1s linear}
+
+section{padding:100px var(--pad);max-width:var(--maxw);margin:0 auto}
+section.full{max-width:none;padding:0}
+.navy{background:var(--navy);color:var(--cream)}
+
+/* === TYPOGRAPHY === */
+.eyebrow{font-size:11px;letter-spacing:.26em;text-transform:uppercase;font-weight:600;color:var(--navy);margin-bottom:20px}
+.navy .eyebrow{color:var(--muted-n)}
+h1.display{font-size:clamp(48px,9vw,120px);line-height:1.0;font-weight:300;letter-spacing:-.02em;font-family:'Montserrat',sans-serif}
+h2.section-h{font-size:clamp(30px,4.2vw,50px);line-height:1.1;font-weight:300;letter-spacing:-.015em}
+.serif{font-family:'Playfair Display',serif;font-weight:400}
+.lede{font-size:clamp(18px,2vw,21px);line-height:1.6;color:var(--muted);margin-top:18px}
+.navy .lede{color:var(--muted-n)}
+p+p{margin-top:16px}
+
+/* === COVER === */
+.cover{min-height:100vh;background:var(--navy);display:flex;flex-direction:column;padding:40px var(--pad) 60px}
+.cover .topbar{display:flex;justify-content:space-between;align-items:center;padding-bottom:22px;border-bottom:1px solid var(--line-n);margin-bottom:auto}
+.logo-mark{display:inline-flex;align-items:center;gap:12px}
+.logo-circle{width:36px;height:36px;border-radius:50%;background:white;display:flex;align-items:center;justify-content:center}
+.logo-circle span{font-family:'Montserrat',sans-serif;font-weight:700;font-size:18px;color:var(--navy);line-height:1}
+.logo-wordmark{font-family:'Montserrat',sans-serif;font-weight:300;font-size:20px;color:white;letter-spacing:.04em}
+.logo-wordmark strong{font-weight:600}
+.cover-label{font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--muted-n)}
+.cover-inner{flex:1;display:flex;flex-direction:column;justify-content:center;padding:60px 0 40px}
+.cover-inner .sub{font-size:clamp(20px,3vw,38px);color:var(--cream);opacity:.7;margin-top:10px;font-weight:300}
+.cover-inner .lede{max-width:600px}
+.cover-foot{display:flex;justify-content:space-between;align-items:flex-end;gap:30px;flex-wrap:wrap;margin-top:auto}
+.cover-foot .by .lbl{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted-n);margin-bottom:8px}
+.cover-foot .by .nm{font-family:'Playfair Display',serif;font-weight:400;font-size:22px;color:var(--cream)}
+.cover-foot .by .ofc{font-size:13px;color:var(--muted-n);margin-top:3px}
+.scrollcue{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted-n);display:flex;align-items:center;gap:12px}
+.scrollcue::after{content:"";width:42px;height:1px;background:var(--clay)}
+
+/* === INTRO NOTE === */
+.intro-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start}
+.sign{margin-top:40px;display:flex;align-items:center;gap:16px}
+.avatar{width:52px;height:52px;border-radius:50%;background:var(--navy);color:var(--cream);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:18px;flex:0 0 auto}
+.sign .nm{font-weight:600;font-size:15px}
+.sign .ofc{font-size:13px;color:var(--muted)}
+
+/* === STEP CARDS === */
+.steps-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:56px}
+.step-card{border:1px solid var(--line);border-radius:16px;padding:32px 28px;background:white;display:flex;flex-direction:column;gap:16px}
+.step-card.accent-clay{background:var(--clay)}
+.step-card.accent-denim{background:var(--denim)}
+.step-card.accent-blush{background:var(--blush)}
+.step-number{font-family:'Playfair Display',serif;font-size:42px;font-weight:400;color:var(--navy);line-height:1;opacity:.3}
+.step-card h3{font-size:17px;font-weight:600;letter-spacing:.01em;line-height:1.3}
+.step-card p{font-size:14.5px;color:var(--muted);line-height:1.6}
+.step-card .tag{display:inline-flex;align-items:center;gap:6px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;color:var(--navy);margin-top:auto;padding-top:12px;border-top:1px solid var(--clay-mid)}
+
+/* === INFO ROWS (FAQ style) === */
+.faq-list{margin-top:48px}
+.faq-item{display:grid;grid-template-columns:1fr 1.6fr;gap:40px;padding:36px 0;border-bottom:1px solid var(--line)}
+.faq-item:first-child{border-top:1px solid var(--line)}
+.faq-q{font-weight:600;font-size:16px;line-height:1.4}
+.faq-a{font-size:15px;color:var(--muted);line-height:1.7}
+.faq-a strong{color:var(--ink);font-weight:600}
+.faq-a a{color:var(--navy);text-decoration:none;border-bottom:1px solid var(--navy)}
+
+/* === TIMELINE === */
+.timeline{position:relative;padding-left:48px;margin-top:48px}
+.timeline::before{content:"";position:absolute;left:10px;top:14px;bottom:0;width:2px;background:var(--line)}
+.tl-row{position:relative;padding:0 0 40px}
+.tl-row:last-child{padding-bottom:0}
+.tl-row::before{content:"";position:absolute;left:-43px;top:6px;width:14px;height:14px;border-radius:50%;background:var(--clay-mid);border:2px solid white;box-shadow:0 0 0 2px var(--line)}
+.tl-row.active::before{background:var(--navy)}
+.tl-label{font-size:11px;letter-spacing:.2em;text-transform:uppercase;font-weight:600;color:var(--muted);margin-bottom:6px}
+.tl-row.active .tl-label{color:var(--navy)}
+.tl-title{font-weight:600;font-size:17px;margin-bottom:8px}
+.tl-body{font-size:14.5px;color:var(--muted);line-height:1.6;max-width:600px}
+
+/* === IMPORTANT NUMBERS (navy section) === */
+.num-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;margin-top:56px;border:1px solid var(--line-n);border-radius:16px;overflow:hidden}
+.num-cell{padding:40px 32px;background:rgba(244,238,227,.04);border-right:1px solid var(--line-n)}
+.num-cell:last-child{border-right:0}
+.num-cell .n{font-family:'Playfair Display',serif;font-size:clamp(28px,4vw,42px);font-weight:400;color:var(--cream);line-height:1;margin-bottom:12px}
+.num-cell .k{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted-n);margin-bottom:6px}
+.num-cell .v{font-size:14px;color:var(--muted-n);line-height:1.5}
+
+/* === CONTACT === */
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:52px}
+.contact-card{border-radius:14px;overflow:hidden}
+.contact-card.dark{background:var(--navy);color:var(--cream);padding:40px}
+.contact-card.light{background:var(--clay);color:var(--ink);padding:40px}
+.contact-card .card-lbl{font-size:11px;letter-spacing:.22em;text-transform:uppercase;font-weight:600;color:var(--muted-n);margin-bottom:20px}
+.contact-card.light .card-lbl{color:var(--muted)}
+.contact-card .card-name{font-family:'Playfair Display',serif;font-size:26px;margin-bottom:6px}
+.contact-card .card-role{font-size:13px;color:var(--muted-n);margin-bottom:24px}
+.contact-card.light .card-role{color:var(--muted)}
+.contact-card .detail{font-size:14px;display:flex;gap:10px;margin-top:10px}
+.contact-card .detail .lbl{text-transform:uppercase;letter-spacing:.1em;font-size:11px;font-weight:600;opacity:.5;min-width:50px;padding-top:2px}
+.contact-card .detail a{color:inherit;text-decoration:none;border-bottom:1px solid rgba(244,238,227,.3)}
+.contact-card.light .detail a{border-bottom:1px solid var(--clay-mid)}
+
+/* === FOOTER === */
+.page-footer{background:var(--navy);color:var(--cream);padding:56px var(--pad);max-width:none}
+.page-footer-inner{max-width:var(--maxw);margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:24px}
+.footer-brand{display:flex;align-items:center;gap:12px}
+.footer-tagline{font-size:13px;color:var(--muted-n);margin-top:6px}
+.footer-right{text-align:right}
+.footer-right p{font-size:13px;color:var(--muted-n)}
+.footer-right a{color:var(--cream);text-decoration:none;font-weight:600}
+
+/* === EDIT PANEL === */
+.edit-toggle{position:fixed;top:50%;right:0;transform:translateY(-50%);z-index:10000;background:var(--navy);color:var(--cream);border:0;border-radius:10px 0 0 10px;padding:14px 10px;font:700 11px/1 'Montserrat',sans-serif;letter-spacing:.08em;cursor:pointer;writing-mode:vertical-rl;text-orientation:mixed;gap:8px;box-shadow:-4px 0 16px rgba(9,11,56,.18)}
+.edit-toggle:hover{background:#11164d}
+.edit-panel{position:fixed;top:0;right:-380px;width:360px;height:100vh;background:white;z-index:9999;box-shadow:-8px 0 40px rgba(9,11,56,.15);overflow-y:auto;transition:right .3s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column}
+.edit-panel.open{right:0}
+.ep-head{background:var(--navy);color:var(--cream);padding:24px 24px 20px;flex-shrink:0}
+.ep-head h3{font-size:14px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.ep-head p{font-size:12px;color:var(--muted-n);margin-top:4px}
+.ep-body{padding:20px 24px;flex:1}
+.ep-group{margin-bottom:20px}
+.ep-group label{display:block;font-size:10px;letter-spacing:.18em;text-transform:uppercase;font-weight:600;color:var(--muted);margin-bottom:6px}
+.ep-group input{width:100%;border:1px solid var(--line);border-radius:8px;padding:10px 12px;font:400 14px/1 'Montserrat',sans-serif;color:var(--ink);background:var(--paper);outline:none;transition:border-color .2s}
+.ep-group input:focus{border-color:var(--navy)}
+.ep-divider{font-size:10px;letter-spacing:.2em;text-transform:uppercase;font-weight:700;color:var(--navy);margin:24px 0 16px;padding-bottom:8px;border-bottom:2px solid var(--navy)}
+.ep-apply{width:100%;background:var(--navy);color:var(--cream);border:0;border-radius:10px;padding:14px;font:700 12px/1 'Montserrat',sans-serif;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;margin-top:8px}
+.ep-apply:hover{background:#11164d}
+.ep-close{background:none;border:1px solid var(--line-n);color:var(--cream);border-radius:6px;padding:6px 12px;font:600 11px/1 'Montserrat',sans-serif;cursor:pointer;float:right;margin-top:-2px}
+@media print{.edit-toggle,.edit-panel,.printbtn{display:none!important}}
+
+/* === SHARE BUTTON === */
+.sharebtn{position:fixed;bottom:22px;right:22px;z-index:9998;background:#16a766;color:white;border:0;border-radius:30px;padding:13px 22px;font:700 12px/1 'Montserrat',sans-serif;letter-spacing:.04em;cursor:pointer;box-shadow:0 6px 20px rgba(0,0,0,.18);display:flex;align-items:center;gap:8px;transition:background .2s}
+.sharebtn:hover{background:#128a52}
+.sharebtn.copied{background:var(--navy)}
+@media print{.sharebtn{display:none!important}}
+[data-reveal]{opacity:0;transform:translateY(18px);transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1)}
+[data-reveal].in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){[data-reveal]{opacity:1!important;transform:none!important}}
+
+/* === RESPONSIVE === */
+@media(max-width:860px){
+  .steps-grid{grid-template-columns:1fr}
+  .intro-grid{grid-template-columns:1fr;gap:40px}
+  .faq-item{grid-template-columns:1fr;gap:12px}
+  .num-grid{grid-template-columns:1fr}
+  .num-cell{border-right:0;border-bottom:1px solid var(--line-n)}
+  .contact-grid{grid-template-columns:1fr}
+  .solicitor-grid{grid-template-columns:1fr!important}
+}
+
+@media print{
+  @page{size:A4;margin:0}
+  html,body{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
+  #progress,.printbtn{display:none!important}
+  [data-reveal]{opacity:1!important;transform:none!important}
+  section{padding:14mm 14mm!important;min-height:0!important}
+  .cover{display:block!important;padding:22mm 14mm!important;min-height:0!important}
+}
+</style>
+</head>
+<body>
+
+<div id="progress"></div>
+
+<!-- ============================================================
+  COVER
+============================================================ -->
+<div class="cover full">
+  <div class="topbar">
+    <div class="logo-mark">
+      <div class="logo-circle"><span>P</span></div>
+      <div>
+        <div class="logo-wordmark"><strong>Place.</strong></div>
+        <!-- EDIT: Change office name below -->
+        <div style="font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:rgba(244,238,227,.5);margin-top:2px">Camp Hill</div>
+      </div>
+    </div>
+    <div class="cover-label">Auction Buyer Guide</div>
+  </div>
+
+  <div class="cover-inner">
+    <div class="eyebrow" style="color:rgba(244,238,227,.55)">Congratulations on your purchase</div>
+    <h1 class="display" style="color:var(--cream)">
+      <span id="dyn-address">12 Example<br>Street.</span>
+    </h1>
+    <div class="cover-inner sub" id="dyn-suburb">Suburb, QLD</div>
+    <p class="lede" style="margin-top:28px">Everything you need to know for a smooth path to settlement — all in one place.</p>
+  </div>
+
+  <div class="cover-foot">
+    <div class="by">
+      <div class="lbl">Prepared by</div>
+      <div class="nm" id="dyn-agent-name-cover">Select agent →</div>
+      <div class="ofc" id="dyn-agent-cover-line">Place Camp Hill · use ✏ Edit to select your agent</div>
+    </div>
+    <div class="scrollcue">Scroll to read</div>
+  </div>
+</div>
+
+
+<!-- ============================================================
+  WELCOME NOTE
+============================================================ -->
+<section>
+  <div class="intro-grid" data-reveal>
+    <div>
+      <div class="eyebrow">A personal note</div>
+      <h2 class="section-h">We're so glad you've found your<br><em class="serif">happy Place.</em></h2>
+    </div>
+    <div>
+      <div style="font-size:18px;line-height:1.7;color:#2b2a25">
+        <!-- EDIT: Personalise this message -->
+        <p>Purchasing a property is one of the most significant decisions you'll ever make, and we're honoured to have been part of your journey.</p>
+        <p>This guide walks you through the key steps between now and settlement — from paying your deposit to handing over solicitor details — so you always know exactly what's happening and what's needed from you.</p>
+        <p>Please don't hesitate to reach out at any time. That's what we're here for.</p>
+      </div>
+      <div class="sign">
+        <div class="avatar" id="dyn-avatar">?</div>
+        <div>
+          <div class="nm" id="dyn-agent-name-sign">Select agent in Edit panel</div>
+          <div class="ofc" id="dyn-agent-role-sign">Place Camp Hill</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+  NEXT STEPS CARDS
+============================================================ -->
+<section style="background:var(--cream);max-width:none;padding-left:var(--pad);padding-right:var(--pad)">
+  <div style="max-width:var(--maxw);margin:0 auto" data-reveal>
+    <div class="eyebrow">What happens next</div>
+    <h2 class="section-h">Your next three steps</h2>
+
+    <div class="steps-grid">
+
+      <div class="step-card accent-clay">
+        <div class="step-number">01</div>
+        <h3>Pay Your Deposit</h3>
+        <p>Your auction deposit is paid in two parts. An <strong>initial $10,000</strong> is due today, with the <strong>balance of 5%</strong> of the purchase price payable by 5pm the following business day.</p>
+        <p>Payment by bank transfer or bank cheque only. Full trust account details are at the bottom of this guide.</p>
+        <div class="tag">⏱ $10,000 today · balance by 5pm next business day</div>
+      </div>
+
+      <div class="step-card accent-denim">
+        <div class="step-number">02</div>
+        <h3>Send Solicitor Details</h3>
+        <p>Please send us your solicitor's name, firm, email and phone number as soon as possible. We'll pass these on to the vendor's solicitor to get things moving right away.</p>
+        <p>If you don't yet have one, we've listed two conveyancers we highly recommend further down this page.</p>
+        <div class="tag">📧 Send us their details ASAP</div>
+      </div>
+
+      <div class="step-card accent-blush">
+        <div class="step-number">03</div>
+        <h3>Prepare for Settlement</h3>
+        <p>As an unconditional auction purchase, there are no further conditions to satisfy. Your solicitor will work with your bank to have funds ready by the settlement date in your contract.</p>
+        <p>Stay in close contact with your solicitor and bank so everything is in place well ahead of time.</p>
+        <div class="tag">🏦 Coordinate with your bank early</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+  FAQ / INFO ROWS
+============================================================ -->
+<section data-reveal>
+  <div class="eyebrow">Common questions answered</div>
+  <h2 class="section-h">Everything you're<br>probably wondering.</h2>
+
+  <div class="faq-list">
+
+    <div class="faq-item">
+      <div class="faq-q">How does the deposit work at auction?</div>
+      <div class="faq-a">
+        <p>Your deposit is split into two payments. An <strong>initial $10,000</strong> is due on the day of purchase, with the <strong>balance of 5%</strong> of the purchase price due by 5pm the following business day.</p>
+        <p>Both payments go to the <strong>Place Camp Hill Sales Trust Account</strong> at Commonwealth Bank. Use an abbreviated version of the street address as your reference — e.g. 25 Bloggs Street = <strong>BLOG25</strong>. Once transferred, send your remittance to <a href="mailto:hicksteam@eplace.com.au">hicksteam@eplace.com.au</a>.</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">Do I need a solicitor or can I use a conveyancer?</div>
+      <div class="faq-a">
+        <p>Either is perfectly fine. A <strong>licensed conveyancer</strong> handles the legal transfer of property and is often the most cost-effective choice. A solicitor offers broader legal advice if your situation is more complex.</p>
+        <p>We've listed two firms we trust further down this page, or feel free to choose any Queensland-licensed practitioner of your choice.</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">When can I do a pre-settlement inspection?</div>
+      <div class="faq-a">
+        <p>Your pre-settlement inspection will typically take place on the <strong>day of settlement or the day before</strong>. This is your opportunity to walk through the property and confirm it's in the same condition as when you purchased it and that all agreed inclusions are present.</p>
+        <p>Contact us to arrange a time — we'll coordinate access with the vendor.</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">When do I get the keys?</div>
+      <div class="faq-a">
+        <p>Keys are handed over on settlement day once funds have been confirmed as received. Your solicitor will notify you when settlement is complete — usually by midday. We'll be in touch as soon as we hear to arrange key collection or delivery.</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">What happens if something goes wrong before settlement?</div>
+      <div class="faq-a">
+        <p>Call us first. As an unconditional contract, it's important everything is in place on time. If you have any concerns about your funds, solicitor, or anything else, please reach out early — we're here to help you through to the finish line.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ============================================================
+  SOLICITOR RECOMMENDATIONS
+============================================================ -->
+<section style="background:var(--navy);color:var(--cream);max-width:none;padding-left:var(--pad);padding-right:var(--pad);padding-bottom:80px">
+  <div style="max-width:var(--maxw);margin:0 auto" data-reveal>
+    <div class="eyebrow" style="color:var(--muted-n)">Need a solicitor?</div>
+    <h2 class="section-h">Recommended<br><em class="serif">conveyancers.</em></h2>
+    <p class="lede" style="max-width:560px">We've received great service from both of these firms. Of course, you're welcome to choose any Queensland-licensed solicitor or conveyancer of your choice.</p>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:52px;overflow:visible">
+
+      <div style="border:1px solid var(--line-n);border-radius:16px;padding:36px 32px;background:rgba(244,238,227,.04);min-height:0;overflow:visible">
+        <div style="font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted-n);margin-bottom:16px">Conveyancer</div>
+        <div style="font-family:'Playfair Display',serif;font-size:24px;color:var(--cream);margin-bottom:4px">Wheldon &amp; Associates</div>
+        <div style="font-size:14px;color:var(--muted-n);margin-bottom:24px">Jayde Johnston</div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="display:flex;gap:12px;align-items:center">
+            <span style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:rgba(244,238,227,.4);min-width:48px">Phone</span>
+            <a href="tel:0733239788" style="color:var(--cream);text-decoration:none;font-size:15px;border-bottom:1px solid rgba(244,238,227,.25)">07 3323 9788</a>
+          </div>
+          <div style="display:flex;gap:12px;align-items:center">
+            <span style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:rgba(244,238,227,.4);min-width:48px">Email</span>
+            <a href="mailto:conveyancing@wheldons.com" style="color:var(--cream);text-decoration:none;font-size:14px;border-bottom:1px solid rgba(244,238,227,.25)">conveyancing@wheldons.com</a>
+          </div>
+        </div>
+      </div>
+
+      <div style="border:1px solid var(--line-n);border-radius:16px;padding:36px 32px;background:rgba(244,238,227,.04);min-height:0;overflow:visible">
+        <div style="font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted-n);margin-bottom:16px">Conveyancer</div>
+        <div style="font-family:'Playfair Display',serif;font-size:24px;color:var(--cream);margin-bottom:4px">Asset Legal</div>
+        <div style="font-size:14px;color:var(--muted-n);margin-bottom:24px">Jake Morrison</div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="display:flex;gap:12px;align-items:center">
+            <span style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:rgba(244,238,227,.4);min-width:48px">Phone</span>
+            <a href="tel:0422692772" style="color:var(--cream);text-decoration:none;font-size:15px;border-bottom:1px solid rgba(244,238,227,.25)">0422 692 772</a>
+          </div>
+          <div style="display:flex;gap:12px;align-items:center">
+            <span style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:rgba(244,238,227,.4);min-width:48px">Email</span>
+            <a href="mailto:Jake@assetlegal.com.au" style="color:var(--cream);text-decoration:none;font-size:14px;border-bottom:1px solid rgba(244,238,227,.25)">Jake@assetlegal.com.au</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+  SETTLEMENT TIMELINE
+============================================================ -->
+<section style="background:var(--cream);max-width:none;padding-left:var(--pad);padding-right:var(--pad)">
+  <div style="max-width:var(--maxw);margin:0 auto" data-reveal>
+    <div class="eyebrow">Your settlement journey</div>
+    <h2 class="section-h">What to expect,<br>step by step.</h2>
+
+    <div class="timeline">
+
+      <div class="tl-row active">
+        <div class="tl-label">Today · Right now</div>
+        <div class="tl-title">Pay initial deposit & send solicitor details</div>
+        <div class="tl-body">Transfer your initial $10,000 to the trust account and send us your solicitor's contact details. This gets the formal process underway immediately.</div>
+      </div>
+
+      <div class="tl-row">
+        <div class="tl-label">By 5pm the following business day</div>
+        <div class="tl-title">Balance of deposit due</div>
+        <div class="tl-body">The remaining balance to reach 5% of the purchase price must be transferred to the trust account by 5pm. Send your remittance to hicksteam@eplace.com.au once complete.</div>
+      </div>
+
+      <div class="tl-row">
+        <div class="tl-label">1 week before settlement</div>
+        <div class="tl-title">Confirm settlement arrangements</div>
+        <div class="tl-body">Your solicitor will liaise with your bank to ensure funds are prepared and confirm final arrangements with the vendor's solicitor. Stay in close contact with both.</div>
+      </div>
+
+      <div class="tl-row">
+        <div class="tl-label">Day before or day of settlement</div>
+        <div class="tl-title">Pre-settlement inspection</div>
+        <div class="tl-body">Walk through the property to confirm it's in the agreed condition and all inclusions are present. Contact us to arrange your access time.</div>
+      </div>
+
+      <div class="tl-row">
+        <div class="tl-label">Settlement day 🎉</div>
+        <div class="tl-title">Keys are yours</div>
+        <div class="tl-body">Once funds are confirmed received, the property legally becomes yours. We'll be in touch to arrange key handover. Congratulations!</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+  IMPORTANT NUMBERS (navy section)
+============================================================ -->
+<div class="navy" data-reveal>
+  <section>
+    <div class="eyebrow">Key details at a glance</div>
+    <h2 class="section-h">The numbers that matter.</h2>
+    <div class="num-grid">
+      <div class="num-cell">
+        <div class="k">Initial Deposit</div>
+        <div class="n serif">$10,000</div>
+        <div class="v">Due today by bank transfer or bank cheque. Send remittance to hicksteam@eplace.com.au.</div>
+      </div>
+      <div class="num-cell">
+        <div class="k">Balance of 5%</div>
+        <div class="n serif">By 5pm</div>
+        <div class="v">The remaining deposit to reach 5% of purchase price is due by 5pm the following business day.</div>
+      </div>
+      <div class="num-cell">
+        <div class="k">Settlement Date</div>
+        <div class="n serif" id="dyn-settlement">DD MMM</div>
+        <div class="v">The day ownership transfers and you receive your keys. Confirm with your solicitor.</div>
+      </div>
+    </div>
+  </section>
+</div>
+
+
+<!-- ============================================================
+  CONTACT
+============================================================ -->
+<section data-reveal>
+  <div class="eyebrow">We're here for you</div>
+  <h2 class="section-h">Your contacts<br>through settlement.</h2>
+  <p class="lede">Any questions at all — big or small — please reach out. Don't wait until something becomes urgent.</p>
+
+  <div class="contact-grid">
+
+    <div class="contact-card dark" id="dyn-contact-card">
+      <div class="card-lbl">Your Agent</div>
+      <div class="card-name" id="dyn-agent-name-card">Select an agent →</div>
+      <div class="card-role" id="dyn-agent-role-card">Use the ✏ Edit panel</div>
+      <div class="detail"><span class="lbl">Mobile</span><a id="dyn-agent-mobile" href="#">—</a></div>
+      <div class="detail"><span class="lbl">Email</span><a id="dyn-agent-email" href="#">—</a></div>
+    </div>
+
+    <div class="contact-card light">
+      <div class="card-lbl">Sales Trust Account · Deposit Payment</div>
+      <div class="card-name" style="font-size:20px">Place Camp Hill</div>
+      <div class="card-role" style="color:var(--muted)">Sales Trust Account</div>
+      <div class="detail" style="color:var(--ink)">
+        <span class="lbl" style="color:var(--muted)">Bank</span>
+        <span>Commonwealth Bank</span>
+      </div>
+      <div class="detail" style="color:var(--ink)">
+        <span class="lbl" style="color:var(--muted)">Name</span>
+        <span>Place 152 Pty Ltd – Sales Trust Account</span>
+      </div>
+      <div class="detail" style="color:var(--ink)">
+        <span class="lbl" style="color:var(--muted)">BSB</span>
+        <span>064 000</span>
+      </div>
+      <div class="detail" style="color:var(--ink)">
+        <span class="lbl" style="color:var(--muted)">Account</span>
+        <span>12808560</span>
+      </div>
+      <div class="detail" style="color:var(--ink);margin-top:14px;padding-top:14px;border-top:1px solid var(--clay-mid)">
+        <span class="lbl" style="color:var(--muted)">Ref</span>
+        <span>Use abbreviated street address — e.g. 25 Bloggs Street = <strong>BLOG25</strong></span>
+      </div>
+      <div class="detail" style="color:var(--ink)">
+        <span class="lbl" style="color:var(--muted)">Remit</span>
+        <span><a href="mailto:hicksteam@eplace.com.au" style="color:var(--navy);border-bottom:1px solid var(--clay-mid)">hicksteam@eplace.com.au</a></span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ============================================================
+  FOOTER
+============================================================ -->
+<div class="page-footer">
+  <div class="page-footer-inner">
+    <div>
+      <div class="footer-brand">
+        <div class="logo-circle"><span>P</span></div>
+        <div class="logo-wordmark"><strong>Place.</strong> Camp Hill</div>
+      </div>
+      <div class="footer-tagline">Helping people find their happy Place since 2002.</div>
+    </div>
+    <div class="footer-right">
+      <p><a href="https://eplace.com.au">eplace.com.au</a></p>
+      <p style="margin-top:6px">4/152 Boundary Road, Camp Hill QLD 4152</p>
+      <p style="margin-top:4px">(07) 3107 2111</p>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+  EDIT PANEL
+============================================================ -->
+<button class="edit-toggle" onclick="document.getElementById('editPanel').classList.toggle('open')">✏ EDIT</button>
+
+<div class="edit-panel" id="editPanel">
+  <div class="ep-head">
+    <button class="ep-close" onclick="document.getElementById('editPanel').classList.remove('open')">✕ Close</button>
+    <h3>Edit Details</h3>
+    <p>Fill in the fields below then tap Apply.</p>
+  </div>
+  <div class="ep-body">
+
+    <div class="ep-divider">Property</div>
+
+    <div class="ep-group">
+      <label>Street Address (cover heading)</label>
+      <input type="text" id="ep-address" placeholder="e.g. 12 Example Street" value="12 Example Street">
+    </div>
+    <div class="ep-group">
+      <label>Suburb & State</label>
+      <input type="text" id="ep-suburb" placeholder="e.g. Camp Hill, QLD" value="Suburb, QLD">
+    </div>
+    <div class="ep-group">
+      <label>Settlement Date</label>
+      <input type="text" id="ep-settlement" placeholder="e.g. 14 Aug" value="DD MMM">
+    </div>
+
+    <div class="ep-divider">Select Agent(s) — choose up to 2</div>
+
+    <div id="agent-picker" style="display:flex;flex-direction:column;gap:10px;margin-bottom:8px"></div>
+    <div id="ep-agent-error" style="font-size:12px;color:#c0392b;display:none;margin-bottom:8px">Please select at least 1 agent.</div>
+
+    <button class="ep-apply" onclick="applyEdits()">✓ Apply to Page</button>
+
+  </div>
+</div>
+
+<button class="sharebtn" id="shareBtn" onclick="shareClient()">🔗 Copy Client Link</button>
+
+<script>
+// ── Read URL params on load (client view) ─────────────────────
+(function(){
+  const p = new URLSearchParams(window.location.search);
+  if(!p.get('share')) return;
+
+  // Hide edit UI entirely
+  document.getElementById('editPanel')?.remove();
+  document.querySelector('.edit-toggle')?.remove();
+  document.getElementById('shareBtn')?.remove();
+
+  // Apply values from URL
+  const address = p.get('address') || '';
+  const suburb  = p.get('suburb')  || '';
+  const agents  = (p.get('agents') || '').split(',').filter(Boolean).map(Number);
+
+  if(address) setText('dyn-address', address.replace(/\|/g,'<br>'), true);
+  if(suburb)  setText('dyn-suburb', suburb);
+
+  if(agents.length){
+    const a1 = AGENTS[agents[0]];
+    const a2 = agents[1] !== undefined ? AGENTS[agents[1]] : null;
+    const coverName  = a2 ? `${a1.name.split(' ')[0]} & ${a2.name.split(' ')[0]}` : a1.name;
+    const coverLine  = a2 ? `${OFFICE.name} · ${a1.mobile} · ${a2.mobile}` : `${OFFICE.name} · ${a1.email} · ${a1.mobile}`;
+    const avatarText = a2 ? a1.name[0]+a2.name[0] : a1.name.split(' ').map(w=>w[0]).join('').slice(0,2);
+    setText('dyn-agent-name-cover', coverName);
+    setText('dyn-agent-cover-line', coverLine);
+    setText('dyn-avatar', avatarText);
+    setText('dyn-agent-name-sign', coverName);
+    setText('dyn-agent-role-sign', a2 ? OFFICE.name : `Lead Agent · ${OFFICE.name}`);
+    buildContactCard(a1, a2);
+  }
+})();
+
+// ── Share / copy client link ───────────────────────────────────
+function shareClient(){
+  const selected = [...document.querySelectorAll('#agent-picker input:checked')].map(cb => +cb.dataset.idx);
+  const address  = document.getElementById('ep-address').value.trim().replace(/\s+/g,'|');
+  const suburb   = document.getElementById('ep-suburb').value.trim();
+
+  const base = window.location.origin + window.location.pathname;
+  const params = new URLSearchParams({ share:'1', address, suburb, agents: selected.join(',') });
+  const url = `${base}?${params}`;
+
+  navigator.clipboard.writeText(url).then(()=>{
+    const btn = document.getElementById('shareBtn');
+    btn.textContent = '✓ Link Copied!';
+    btn.classList.add('copied');
+    setTimeout(()=>{ btn.textContent = '🔗 Copy Client Link'; btn.classList.remove('copied'); }, 2500);
+  });
+}
+
+
+const AGENTS = [
+  { name:'Antonio Puopolo', mobile:'0450 899 007', email:'antonio@eplace.com.au' },
+  { name:'Shane Hicks',     mobile:'0409 594 629', email:'shanehicks@eplace.com.au' },
+  { name:'Andrey Makhanyok',mobile:'0491 446 146', email:'andrey@eplace.com.au' },
+  { name:'Karl Cheung',     mobile:'0485 505 816', email:'karl@eplace.com.au' },
+];
+const OFFICE = { name:'Place Camp Hill', address:'4/152 Boundary Road, Camp Hill QLD 4152', phone:'(07) 3107 2111', web:'eplace.com.au' };
+
+// ── Build agent picker checkboxes ─────────────────────────────
+const picker = document.getElementById('agent-picker');
+AGENTS.forEach((a,i) => {
+  const initials = a.name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
+  const wrap = document.createElement('label');
+  wrap.style.cssText = 'display:flex;align-items:center;gap:12px;padding:12px 14px;border:1px solid #cfcabb;border-radius:10px;cursor:pointer;transition:border-color .2s,background .2s;font-size:14px;';
+  wrap.innerHTML = `
+    <input type="checkbox" data-idx="${i}" onchange="limitAgents(this)" style="width:16px;height:16px;accent-color:#090b38;flex-shrink:0">
+    <div style="width:36px;height:36px;border-radius:50%;background:#090b38;color:#F4EEE3;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex-shrink:0">${initials}</div>
+    <div><div style="font-weight:600;color:#1C1B17">${a.name}</div><div style="font-size:12px;color:#6f6a5d">${a.mobile}</div></div>`;
+  wrap.querySelector('input').addEventListener('change', () => {
+    wrap.style.borderColor = wrap.querySelector('input').checked ? '#090b38' : '#cfcabb';
+    wrap.style.background  = wrap.querySelector('input').checked ? '#F4EEE3' : '';
+  });
+  picker.appendChild(wrap);
+});
+
+function limitAgents(cb){
+  const checked = [...document.querySelectorAll('#agent-picker input:checked')];
+  if(checked.length > 2){ cb.checked = false; cb.closest('label').style.borderColor='#cfcabb'; cb.closest('label').style.background=''; }
+}
+
+// ── Progress bar ──────────────────────────────────────────────
+const prog = document.getElementById('progress');
+window.addEventListener('scroll',()=>{
+  const s = document.documentElement;
+  prog.style.width = (s.scrollTop/(s.scrollHeight-s.clientHeight)*100)+'%';
+});
+
+// ── Reveal on scroll ──────────────────────────────────────────
+const revEls = document.querySelectorAll('[data-reveal]');
+const io = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}});
+},{threshold:.12});
+revEls.forEach(el=>io.observe(el));
+
+// ── Apply edits ───────────────────────────────────────────────
+function applyEdits(){
+  const selected = [...document.querySelectorAll('#agent-picker input:checked')].map(cb => AGENTS[+cb.dataset.idx]);
+  const errEl = document.getElementById('ep-agent-error');
+
+  if(selected.length === 0){ errEl.style.display='block'; return; }
+  errEl.style.display = 'none';
+
+  const address = document.getElementById('ep-address').value.trim();
+  const suburb  = document.getElementById('ep-suburb').value.trim();
+  const settle  = document.getElementById('ep-settlement').value.trim();
+
+  const a1 = selected[0];
+  const a2 = selected[1] || null;
+
+  // Initials & display name for cover/sign (primary agent or "Team" if two)
+  const coverName   = a2 ? `${a1.name.split(' ')[0]} & ${a2.name.split(' ')[0]}` : a1.name;
+  const coverLine   = a2
+    ? `${OFFICE.name} · ${a1.mobile} · ${a2.mobile}`
+    : `${OFFICE.name} · ${a1.email} · ${a1.mobile}`;
+  const avatarText  = a2
+    ? a1.name.split(' ')[0][0] + a2.name.split(' ')[0][0]
+    : a1.name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
+  const signRole    = a2 ? `${OFFICE.name}` : `Lead Agent · ${OFFICE.name}`;
+
+  // Address line break
+  const addrBreak = address.replace(/^(\d+\s+\S+)\s+/, '$1<br>');
+
+  // Cover
+  setText('dyn-address', addrBreak, true);
+  setText('dyn-suburb', suburb);
+  setText('dyn-agent-name-cover', coverName);
+  setText('dyn-agent-cover-line', coverLine);
+
+  // Welcome note sign
+  setText('dyn-avatar', avatarText);
+  setText('dyn-agent-name-sign', coverName);
+  setText('dyn-agent-role-sign', signRole);
+
+  // Key numbers
+  setText('dyn-settlement', settle);
+
+  // Contact card — rebuild dynamically
+  buildContactCard(a1, a2);
+
+  document.getElementById('editPanel').classList.remove('open');
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function buildContactCard(a1, a2){
+  const card = document.getElementById('dyn-contact-card');
+  if(!card) return;
+
+  if(a2){
+    // Two agents — show both stacked
+    card.innerHTML = `
+      <div class="card-lbl">Your Agents</div>
+      <div style="display:flex;flex-direction:column;gap:24px;margin-top:4px">
+        ${agentBlock(a1)}
+        <div style="border-top:1px solid rgba(244,238,227,.15);padding-top:20px">${agentBlock(a2)}</div>
+      </div>`;
+  } else {
+    card.innerHTML = `
+      <div class="card-lbl">Your Agent</div>
+      <div class="card-name">${a1.name}</div>
+      <div class="card-role">Lead Agent · ${OFFICE.name}</div>
+      <div class="detail"><span class="lbl">Mobile</span><a href="tel:${a1.mobile.replace(/\s/g,'')}">${a1.mobile}</a></div>
+      <div class="detail"><span class="lbl">Email</span><a href="mailto:${a1.email}">${a1.email}</a></div>`;
+  }
+}
+
+function agentBlock(a){
+  return `
+    <div>
+      <div style="font-weight:700;font-size:16px;color:var(--cream);margin-bottom:2px">${a.name}</div>
+      <div style="font-size:12px;color:var(--muted-n);margin-bottom:10px">Lead Agent · ${OFFICE.name}</div>
+      <div class="detail"><span class="lbl">Mobile</span><a href="tel:${a.mobile.replace(/\s/g,'')}">${a.mobile}</a></div>
+      <div class="detail"><span class="lbl">Email</span><a href="mailto:${a.email}">${a.email}</a></div>
+    </div>`;
+}
+
+function setText(id, val, html=false){
+  const el = document.getElementById(id);
+  if(!el) return;
+  if(html) el.innerHTML = val; else el.textContent = val;
+}
+</script>
+</body>
+</html>
